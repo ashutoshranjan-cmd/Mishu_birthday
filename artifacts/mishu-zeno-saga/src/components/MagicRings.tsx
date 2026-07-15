@@ -198,7 +198,8 @@ export default function MagicRings({
     const resize = () => {
       const width = Math.max(1, mount.clientWidth);
       const height = Math.max(1, mount.clientHeight);
-      const dpr = Math.min(window.devicePixelRatio, 2);
+      const isMobile = window.innerWidth < 768;
+      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio, 2);
       renderer.setPixelRatio(dpr);
       renderer.setSize(width, height, false);
       uniforms.uResolution.value.set(width * dpr, height * dpr);

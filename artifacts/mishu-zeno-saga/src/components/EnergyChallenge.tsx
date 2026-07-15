@@ -4,6 +4,7 @@ import { useAudio } from './AudioProvider';
 import confetti from 'canvas-confetti';
 import { useReducedMotion } from './ReducedMotionProvider';
 import MagicRings from './MagicRings';
+import { useIsMobile } from '../hooks/use-mobile';
 
 export const EnergyChallenge: React.FC = () => {
   const [power, setPower] = useState(0);
@@ -11,6 +12,7 @@ export const EnergyChallenge: React.FC = () => {
   const [pulseId, setPulseId] = useState(0);
   const { playSfx } = useAudio();
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
 
   const handleClick = () => {
     if (released) return;
@@ -61,7 +63,7 @@ export const EnergyChallenge: React.FC = () => {
             color="#49E8FF"
             colorTwo="#FFD43B"
             speed={1.1 + power / 140}
-            ringCount={7}
+            ringCount={isMobile ? 3 : 7}
             attenuation={9.2}
             lineThickness={5.2}
             baseRadius={0.14}

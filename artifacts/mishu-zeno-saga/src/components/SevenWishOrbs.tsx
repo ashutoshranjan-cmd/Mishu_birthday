@@ -5,6 +5,8 @@ import { useAudio } from './AudioProvider';
 import Hyperspeed from './Hyperspeed';
 import { useReducedMotion } from './ReducedMotionProvider';
 
+import { useIsMobile } from '../hooks/use-mobile';
+
 const STAR_LAYOUTS: Record<number, { top: string; left: string }[]> = {
   1: [
     { top: '50%', left: '50%' }
@@ -55,6 +57,7 @@ export const SevenWishOrbs: React.FC = () => {
   const [showFinal, setShowFinal] = useState(false);
   const { playSfx } = useAudio();
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const dragonAsset = `${import.meta.env.BASE_URL}image/dragon.png`;
   const hyperspeedOptions = useMemo(
     () => ({
@@ -114,7 +117,7 @@ export const SevenWishOrbs: React.FC = () => {
     <section id="birthday-orbs" className="saga-section py-20 md:py-24 bg-space-navy relative overflow-hidden transition-colors duration-1000" style={{
       backgroundColor: showFinal ? '#000000' : 'var(--color-space-navy)'
     }}>
-      {!prefersReducedMotion && (
+      {!prefersReducedMotion && !isMobile && (
         <div className="absolute inset-0 z-0 opacity-35 md:opacity-50">
           <Hyperspeed effectOptions={hyperspeedOptions} />
         </div>
@@ -179,10 +182,10 @@ export const SevenWishOrbs: React.FC = () => {
                                    left: pos.left,
                                    transform: 'translate(-50%, -50%)',
                                  }}
-                               >
-                                 ★
-                               </div>
-                             ))}
+                                >
+                                  ★
+                                </div>
+                              ))}
                           </div>
                         )}
                       </button>
@@ -192,11 +195,11 @@ export const SevenWishOrbs: React.FC = () => {
                           <motion.div
                             initial={{ opacity: 0, scale: 0.5, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            className={`absolute inset-x-[-50%] top-full text-center z-20 ${
+                            className={`absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:inset-x-[-50%] top-full text-center z-20 w-[110px] md:w-auto ${
                               i % 2 === 0 ? 'mt-4' : 'mt-16'
                             }`}
                           >
-                            <span className="bg-space-navy/90 border border-transformation-gold/50 px-3 py-1 rounded-full text-xs font-mono text-transformation-gold uppercase whitespace-nowrap shadow-[0_0_10px_rgba(255,212,59,0.3)]">
+                            <span className="bg-space-navy/90 border border-transformation-gold/50 px-1.5 md:px-3 py-1 rounded-lg md:rounded-full text-[9px] md:text-xs font-mono text-transformation-gold uppercase whitespace-normal md:whitespace-nowrap block md:inline-block shadow-[0_0_10px_rgba(255,212,59,0.3)]">
                               Wish {i + 1}: {wish}
                             </span>
                           </motion.div>

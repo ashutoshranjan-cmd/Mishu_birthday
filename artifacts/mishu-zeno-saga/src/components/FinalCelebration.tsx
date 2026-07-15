@@ -5,12 +5,14 @@ import { useAudio } from './AudioProvider';
 import confetti from 'canvas-confetti';
 import { useReducedMotion } from './ReducedMotionProvider';
 import Ballpit from './Ballpit';
+import { useIsMobile } from '../hooks/use-mobile';
 
 export const FinalCelebration: React.FC = () => {
   const [charging, setCharging] = useState(false);
   const [wished, setWished] = useState(false);
   const { playSfx } = useAudio();
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
   const finalImage =
     sagaConfig.gallery.find((item) => item.id === 'img3') ?? sagaConfig.gallery[2];
 
@@ -58,7 +60,7 @@ export const FinalCelebration: React.FC = () => {
     <section id="final" className="saga-section py-32 bg-space-navy relative overflow-hidden min-h-screen flex items-center justify-center">
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--color-cosmic-purple)_0%,_var(--color-space-navy)_80%)]" />
-      {!prefersReducedMotion && (
+      {!prefersReducedMotion && !isMobile && (
         <div className="absolute inset-0 z-0 min-h-[500px] overflow-hidden opacity-[0.16] md:opacity-[0.24]">
           <Ballpit
             count={100}
