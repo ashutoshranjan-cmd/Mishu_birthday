@@ -36,14 +36,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode; started: boole
     bgmEpicRef.current = new Howl({
       src: [sagaConfig.musicPaths.background],
       loop: true,
-      volume: 0,
+      volume: volume * 0.5,
       html5: true
     });
     
     bgmCalmRef.current = new Howl({
       src: [sagaConfig.musicPaths.calm],
       loop: true,
-      volume: 0,
+      volume: volume * 0.5,
       html5: true
     });
 
@@ -72,30 +72,27 @@ export const AudioProvider: React.FC<{ children: React.ReactNode; started: boole
   // Handle playing music when started
   useEffect(() => {
     if (!started || !musicEnabled) {
-      bgmEpicRef.current?.fade(volume, 0, 1000);
-      bgmCalmRef.current?.fade(volume, 0, 1000);
-      
-      setTimeout(() => {
-        if (!musicEnabled) {
-          bgmEpicRef.current?.pause();
-          bgmCalmRef.current?.pause();
-        }
-      }, 1000);
+      bgmEpicRef.current?.volume(0);
+      bgmCalmRef.current?.volume(0);
+      bgmEpicRef.current?.pause();
+      bgmCalmRef.current?.pause();
       return;
     }
 
     const activeBgm = bgmTheme === 'epic' ? bgmEpicRef.current : bgmCalmRef.current;
     const inactiveBgm = bgmTheme === 'epic' ? bgmCalmRef.current : bgmEpicRef.current;
 
-    if (activeBgm && !activeBgm.playing()) {
-      activeBgm.play();
+    if (activeBgm) {
+      activeBgm.volume(volume * 0.5);
+      if (!activeBgm.playing()) {
+        activeBgm.play();
+      }
     }
     
-    activeBgm?.fade(0, volume * 0.5, 2000);
-    inactiveBgm?.fade(volume * 0.5, 0, 1000);
-    setTimeout(() => {
-      inactiveBgm?.pause();
-    }, 1000);
+    if (inactiveBgm) {
+      inactiveBgm.volume(0);
+      inactiveBgm.pause();
+    }
 
   }, [started, musicEnabled, bgmTheme, volume]);
 
