@@ -1,0 +1,24 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "node ./scripts/preinstall.mjs",
+    "dev:api": "pnpm --filter @workspace/api-server dev",
+    "dev:saga": "pnpm --filter @workspace/mishu-zeno-saga dev",
+    "dev:mockup": "pnpm --filter @workspace/mockup-sandbox dev",
+    "dev": "pnpm --filter @workspace/api-server --filter @workspace/mishu-zeno-saga --parallel dev",
+    "build": "corepack pnpm run typecheck && corepack pnpm -r --if-present run build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "corepack pnpm run typecheck:libs && corepack pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+  },
+  "private": true,
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.4",
+    "typescript": "~5.9.3"
+  },
+  "packageManager": "pnpm@11.11.0"
+}
