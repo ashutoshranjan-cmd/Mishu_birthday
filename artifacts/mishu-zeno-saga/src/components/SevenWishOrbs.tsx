@@ -5,6 +5,51 @@ import { useAudio } from './AudioProvider';
 import Hyperspeed from './Hyperspeed';
 import { useReducedMotion } from './ReducedMotionProvider';
 
+const STAR_LAYOUTS: Record<number, { top: string; left: string }[]> = {
+  1: [
+    { top: '50%', left: '50%' }
+  ],
+  2: [
+    { top: '50%', left: '36%' },
+    { top: '50%', left: '64%' }
+  ],
+  3: [
+    { top: '35%', left: '50%' },
+    { top: '62%', left: '34%' },
+    { top: '62%', left: '66%' }
+  ],
+  4: [
+    { top: '32%', left: '50%' },
+    { top: '68%', left: '50%' },
+    { top: '50%', left: '32%' },
+    { top: '50%', left: '68%' }
+  ],
+  5: [
+    { top: '34%', left: '34%' },
+    { top: '34%', left: '66%' },
+    { top: '50%', left: '50%' },
+    { top: '66%', left: '34%' },
+    { top: '66%', left: '66%' }
+  ],
+  6: [
+    { top: '32%', left: '35%' },
+    { top: '50%', left: '35%' },
+    { top: '68%', left: '35%' },
+    { top: '32%', left: '65%' },
+    { top: '50%', left: '65%' },
+    { top: '68%', left: '65%' }
+  ],
+  7: [
+    { top: '50%', left: '50%' },
+    { top: '32%', left: '50%' },
+    { top: '41%', left: '66%' },
+    { top: '59%', left: '66%' },
+    { top: '68%', left: '50%' },
+    { top: '59%', left: '34%' },
+    { top: '41%', left: '34%' }
+  ]
+};
+
 export const SevenWishOrbs: React.FC = () => {
   const [collected, setCollected] = useState<number[]>([]);
   const [showFinal, setShowFinal] = useState(false);
@@ -99,7 +144,7 @@ export const SevenWishOrbs: React.FC = () => {
                 />
               </div>
 
-              <div className="flex flex-wrap justify-center gap-5 md:gap-8 max-w-4xl mx-auto min-h-[260px]">
+              <div className="flex flex-wrap justify-center gap-5 md:gap-8 max-w-4xl mx-auto min-h-[320px]">
                 {sagaConfig.sevenWishes.map((wish, i) => {
                   const isCollected = collected.includes(i);
                   return (
@@ -124,9 +169,19 @@ export const SevenWishOrbs: React.FC = () => {
                         )}
                         {/* Stars based on index + 1 */}
                         {!isCollected && (
-                          <div className="absolute inset-0 flex items-center justify-center flex-wrap gap-1 p-4 opacity-50">
-                             {Array.from({length: i+1}).map((_, starIdx) => (
-                               <div key={starIdx} className="w-2 h-2 text-crimson-red drop-shadow-[0_0_4px_rgba(231,49,49,0.75)]">★</div>
+                          <div className="absolute inset-0 pointer-events-none opacity-90">
+                             {(STAR_LAYOUTS[i + 1] || []).map((pos, starIdx) => (
+                               <div
+                                 key={starIdx}
+                                 className="absolute text-crimson-red select-none text-[10px] md:text-[14px] drop-shadow-[0_0_3px_rgba(231,49,49,0.95)]"
+                                 style={{
+                                   top: pos.top,
+                                   left: pos.left,
+                                   transform: 'translate(-50%, -50%)',
+                                 }}
+                               >
+                                 ★
+                               </div>
                              ))}
                           </div>
                         )}
@@ -137,7 +192,9 @@ export const SevenWishOrbs: React.FC = () => {
                           <motion.div
                             initial={{ opacity: 0, scale: 0.5, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            className="absolute inset-x-[-50%] top-full mt-4 text-center z-20"
+                            className={`absolute inset-x-[-50%] top-full text-center z-20 ${
+                              i % 2 === 0 ? 'mt-4' : 'mt-16'
+                            }`}
                           >
                             <span className="bg-space-navy/90 border border-transformation-gold/50 px-3 py-1 rounded-full text-xs font-mono text-transformation-gold uppercase whitespace-nowrap shadow-[0_0_10px_rgba(255,212,59,0.3)]">
                               Wish {i + 1}: {wish}
